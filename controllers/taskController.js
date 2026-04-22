@@ -29,7 +29,7 @@ export const getTasks = async (req, res) => {
   }
 };
 
-// ✏️ UPDATE TASK
+// ✏️ UPDATE TASK added on phase 4
 export const updateTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -56,7 +56,7 @@ export const updateTask = async (req, res) => {
   }
 };
 
-// 🗑️ DELETE TASK
+// 🗑️ DELETE TASK added on phase 4
 export const deleteTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);

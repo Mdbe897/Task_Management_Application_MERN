@@ -14,10 +14,10 @@ const router = express.Router();
 router.post("/", protect, createTask);
 router.get("/", protect, getTasks);
 
-// ✏️ UPDATE
+// ✏️ UPDATE added on phase 4
 router.put("/:id", protect, updateTask);
 
-// 🗑️ DELETE
+// 🗑️ DELETE added on phase 4
 router.delete("/:id", protect, deleteTask);
 
 export default router;
