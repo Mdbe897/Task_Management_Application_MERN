@@ -18,10 +18,35 @@ export const createTask = async (req, res) => {
   }
 };
 
-// GET USER TASKS
+// GET TASKS (with filter/search/sort)
 export const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ user: req.user._id });
+    const { status, search, sort } = req.query;
+
+    let query = { user: req.user._id };
+
+    // 🔎 search
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    // 🏷️ filter
+    if (status) {
+      query.status = status;
+    }
+
+    // ⏳ sort
+    let sortOption = {};
+    if (sort === "deadline") {
+      sortOption.deadline = 1;
+    } else if (sort === "newest") {
+      sortOption.createdAt = -1;
+    }
+
+    const tasks = await Task.find(query).sort(sortOption);
 
     res.json(tasks);
   } catch (error) {
@@ -29,7 +54,7 @@ export const getTasks = async (req, res) => {
   }
 };
 
-// ✏️ UPDATE TASK added on phase 4
+// UPDATE TASK
 export const updateTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -38,7 +63,6 @@ export const updateTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // 🔐 check ownership
     if (task.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: "Not authorized" });
     }
@@ -50,13 +74,12 @@ export const updateTask = async (req, res) => {
     );
 
     res.json(updatedTask);
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// 🗑️ DELETE TASK added on phase 4
+// DELETE TASK
 export const deleteTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id);
@@ -65,7 +88,6 @@ export const deleteTask = async (req, res) => {
       return res.status(404).json({ message: "Task not found" });
     }
 
-    // 🔐 check ownership
     if (task.user.toString() !== req.user._id.toString()) {
       return res.status(401).json({ message: "Not authorized" });
     }
@@ -73,7 +95,6 @@ export const deleteTask = async (req, res) => {
     await task.deleteOne();
 
     res.json({ message: "Task deleted successfully" });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
