@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL; // ✅ move outside component
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -8,20 +10,17 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      const res = await axios.post("https://taskmanagementapplicationmern-production.up.railway.app/api/auth/register", {
+      const res = await axios.post(`${API}/api/auth/register`, {
         name,
         email,
         password
       });
 
-      // save token directly after register (optional but useful)
       localStorage.setItem("token", res.data.token);
-
-      // redirect to dashboard
       window.location.href = "/dashboard";
 
     } catch (err) {
-      console.log(err);
+      console.log("REGISTER ERROR:", err.response?.data || err.message);
     }
   };
 
@@ -46,9 +45,10 @@ const Register = () => {
       />
 
       <button onClick={handleRegister}>Register</button>
-	  <p>
-  Already have an account? <a href="/">Login</a>
-</p>
+
+      <p>
+        Already have an account? <a href="/">Login</a>
+      </p>
     </div>
   );
 };

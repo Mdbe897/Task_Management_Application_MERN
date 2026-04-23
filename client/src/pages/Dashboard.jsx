@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL; // ✅ move outside component
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
 
@@ -12,7 +14,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("taskmanagementapplicationmern-production.up.railway.app/api/tasks", {
+      const res = await axios.get(`${API}/api/tasks`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -20,7 +22,7 @@ const Dashboard = () => {
 
       setTasks(res.data);
     } catch (error) {
-      console.log("FETCH ERROR:", error);
+      console.log("FETCH ERROR:", error.response?.data || error.message);
     }
   };
 
@@ -30,7 +32,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "taskmanagementapplicationmern-production.up.railway.app/api/tasks",
+        `${API}/api/tasks`,
         { title, description },
         {
           headers: {
@@ -45,7 +47,7 @@ const Dashboard = () => {
       fetchTasks(); // refresh list
 
     } catch (error) {
-      console.log("CREATE ERROR:", error);
+      console.log("CREATE ERROR:", error.response?.data || error.message);
     }
   };
 

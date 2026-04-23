@@ -1,13 +1,15 @@
 import { useState } from "react";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL; // ✅ move outside component
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("https://taskmanagementapplicationmern-production.up.railway.app/api/auth/login", {
+      const res = await axios.post(`${API}/api/auth/login`, {
         email,
         password
       });
@@ -16,7 +18,7 @@ const Login = () => {
 
       window.location.href = "/dashboard";
     } catch (err) {
-      console.log(err);
+      console.log("LOGIN ERROR:", err.response?.data || err.message);
     }
   };
 
