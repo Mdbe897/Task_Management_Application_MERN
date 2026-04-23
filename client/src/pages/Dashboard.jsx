@@ -12,7 +12,7 @@ const Dashboard = () => {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.get("http://localhost:5000/api/tasks", {
+      const res = await axios.get("taskmanagementapplicationmern-production.up.railway.app/api/tasks", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -30,7 +30,7 @@ const Dashboard = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5000/api/tasks",
+        "taskmanagementapplicationmern-production.up.railway.app/api/tasks",
         { title, description },
         {
           headers: {
