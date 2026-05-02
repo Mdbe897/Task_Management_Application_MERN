@@ -1,14 +1,16 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
-const API = import.meta.env.VITE_API_URL; // ✅ move outside component
+import API from "../api";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
     try {
       const res = await axios.post(`${API}/api/auth/login`, {
         email,
@@ -19,12 +21,12 @@ const Login = () => {
 
       window.location.href = "/dashboard";
     } catch (err) {
-      console.log("LOGIN ERROR:", err.response?.data || err.message);
+      setMessage(err.response?.data?.message || err.message || "Login failed");
     }
   };
 
   return (
-    <div>
+    <form onSubmit={handleLogin}>
       <h2>Login</h2>
 
       <input
@@ -38,11 +40,12 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button onClick={handleLogin}>Login</button>
+      <button type="submit">Login</button>
+	  {message ? <p>{message}</p> : null}
 	  <p>
   Don't have an account? <Link to="/register">Register</Link>
 </p>
-    </div>
+    </form>
   );
 };
 

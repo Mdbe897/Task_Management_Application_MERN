@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-const API = import.meta.env.VITE_API_URL; // ✅ move outside component
+import API from "../api";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
