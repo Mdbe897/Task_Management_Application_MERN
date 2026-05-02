@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const API = import.meta.env.VITE_API_URL; // ✅ move outside component
 
@@ -39,7 +40,7 @@ const Login = () => {
 
       <button onClick={handleLogin}>Login</button>
 	  <p>
-  Don't have an account? <a href="/register">Register</a>
+  Don't have an account? <Link to="/register">Register</Link>
 </p>
     </div>
   );
